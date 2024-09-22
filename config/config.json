@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "rootpassword",
+    "database": "q88parser",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "rootpassword",
+    "database": "database_test",
+    "host": "db",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "rootpassword",
+    "database": "database_production",
+    "host": "db",
+    "dialect": "mysql"
+  }
+}

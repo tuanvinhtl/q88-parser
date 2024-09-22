@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1>Upload Document</h1>
+
+    <form action="/upload/upload" method="POST" enctype="multipart/form-data">
+      <label for="vessel">Select Vessel:</label>
+      <select name="vesselId" id="vessel">
+        <% vessels.forEach(vessel => { %>
+        <option value="<%= vessel.id %>"><%= vessel.name %></option>
+        <% }) %>
+      </select>
+
+      <label for="document">Upload File:</label>
+      <input type="file" name="document" id="document" />
+
+      <button type="submit">Upload</button>
+    </form>
+  </body>
+</html>

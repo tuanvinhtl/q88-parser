@@ -1,0 +1,46 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      args:
+        NODE_ENV: development # Pass environment argument to Dockerfile
+    container_name: q88-parser-app
+    restart: always
+    ports:
+      - "3000:3000" # Expose the Node.js app on port 3000
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=q88parser
+      - DB_PORT=3306
+    volumes:
+      - .:/usr/src/app # Mount the current directory to the container
+      - /usr/src/app/node_modules # Avoid mounting node_modules from host
+    command: npm run dev # Run nodemon for development
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: q88-parser-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: q88parser
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql # Persist MySQL data
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    volumes:
+      - ./containers/adminer/adminer.css:/var/www/html/adminer.css
+
+volumes:
+  dbdata:
