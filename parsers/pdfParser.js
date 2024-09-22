@@ -1,7 +1,12 @@
 // parsers/pdfParser.js
 const pdf = require("pdf-parse");
 const fs = require("fs");
-const { cleanArray, parseQ88Data } = require("../helpers/q88Parser");
+const {
+  cleanArray,
+  parseQ88Data,
+  parseLoadlineTable,
+  parseQ88Date,
+} = require("../helpers/q88Parser");
 
 async function parsePdf(filePath) {
   const dataBuffer = fs.readFileSync(filePath);
@@ -12,21 +17,51 @@ async function parsePdf(filePath) {
 
     // Define your mappings using bullet points
     const fieldMappings = [
-      { key: "date_update", bulletPoint: "1.1" },
-      { key: "vessel_name_imo", bulletPoint: "1.2" },
-      { key: "vessel_previous_names", bulletPoint: "1.3" },
-      { key: "date_delivered_builder", bulletPoint: "1.4" },
-      { key: "flag_port_registry", bulletPoint: "1.5" },
-      { key: "call_sign_mmsi", bulletPoint: "1.6" },
-      { key: "commercial_operator", bulletPoint: "1.12" },
-      { key: "safety_radio_certificate", bulletPoint: "2.2" },
+      {
+        key: "date_update",
+        bulletPoint: "1.1",
+        parseFunction: parseQ88Date,
+      },
+      {
+        key: "vessel_name_imo",
+        bulletPoint: "1.2",
+      },
+      {
+        key: "vessel_previous_names",
+        bulletPoint: "1.3",
+      },
+      {
+        key: "date_delivered_builder",
+        bulletPoint: "1.4",
+      },
+      {
+        key: "flag_port_registry",
+        bulletPoint: "1.5",
+      },
+      {
+        key: "call_sign_mmsi",
+        bulletPoint: "1.6",
+      },
+      {
+        key: "commercial_operator",
+        bulletPoint: "1.12",
+      },
+      {
+        key: "safety_radio_certificate",
+        bulletPoint: "2.2",
+      },
       { key: "pi_club", bulletPoint: "1.14" },
+      {
+        key: "load_line",
+        bulletPoint: "1.39",
+        parseFunction: parseLoadlineTable,
+      },
       // Add more mappings as needed
     ];
     // Example: Split the text into lines and parse
     const lines = data.text.split("\n").filter((line) => line.trim() !== "");
 
-    console.log(lines)
+    console.log(lines);
     const cleanedData = cleanArray(lines);
     const parsedQ88Data = parseQ88Data(cleanedData, fieldMappings);
 
